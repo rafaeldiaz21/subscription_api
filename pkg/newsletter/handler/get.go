@@ -15,7 +15,7 @@ import (
 // @Summary      Read subscriptions
 // @Tags         subscriptions
 // @Router       /subscriptions [get]
-// @Param        page	        query  int		 true   "Result page"                                   example(1)
+// @Param        page	        query  int		 true   "Result page"                                    example(1)
 // @Param        maxPageSize	query  int		 true   "Max page size"                                  example(10)
 // @Param        userId	        query  string	 false  "User ID"                                        example(1)
 // @Param        blogId	        query  string	 false  "Blog ID"                                        example(1)
@@ -35,27 +35,33 @@ func (h *handler) Get(ctx *gin.Context) {
 	var blogID uuid.UUID
 
 	if pagination, err = pagination.Get(ctx); err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		result.SetErrorResponse(ctx, http.StatusBadRequest, err, "")
 		return
 	}
 
 	if filter, err = filter.Get(ctx); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		result.SetErrorResponse(ctx, http.StatusBadRequest, err, "")
 		return
 	}
 
 	if filter.UserID != "" {
-		userID = uuid.MustParse(filter.UserID)
+		if userID, err = uuid.Parse(filter.UserID); err != nil {
+			result.SetErrorResponse(ctx, http.StatusBadRequest, err, "")
+			return
+		}
 	}
 
 	if filter.BlogID != "" {
-		blogID = uuid.MustParse(filter.BlogID)
+		if blogID, err = uuid.Parse(filter.BlogID); err != nil {
+			result.SetErrorResponse(ctx, http.StatusBadRequest, err, "")
+			return
+		}
 	}
 
 	newsLetterService = service.Must(repository.Must())
 
 	if subscriptions, err = newsLetterService.Get(ctx, userID, blogID, filter.Interest); err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		result.SetErrorResponse(ctx, http.StatusInternalServerError, err, "")
 		return
 	}
 	result = result.SetOkResponse(subscriptions, *filter, *pagination)

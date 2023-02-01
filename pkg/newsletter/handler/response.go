@@ -2,6 +2,7 @@ package handler
 
 import (
 	"git.mcontigo.com/safeplay/newsletter-api/pkg/newsletter"
+	"github.com/gin-gonic/gin"
 )
 
 type Response struct {
@@ -16,6 +17,11 @@ type Result struct {
 	Interests []string `json:"interests"`
 }
 
+type ErrorResponse struct {
+	Err     string `json:"error"`
+	Message string `json:"message"`
+}
+
 func (r Response) SetOkResponse(result *newsletter.Result[*newsletter.Subscription], filter Filter, pagination Pagination) Response {
 	var response = Response{
 		Filter:     filter,
@@ -23,4 +29,13 @@ func (r Response) SetOkResponse(result *newsletter.Result[*newsletter.Subscripti
 		Results:    result,
 	}
 	return response
+}
+
+// TO DO it must be according API agreements
+func (r Response) SetErrorResponse(ctx *gin.Context, code int, err error, message string) {
+	var response = ErrorResponse{
+		Err:     err.Error(),
+		Message: message,
+	}
+	ctx.JSON(code, response)
 }
