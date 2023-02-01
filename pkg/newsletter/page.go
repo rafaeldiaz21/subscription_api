@@ -3,8 +3,8 @@ package newsletter
 import "fmt"
 
 type Page[T any] struct {
-	Number   int
-	Elements []T
+	Number   int `json:"number"`
+	Elements []T `json:"elements"`
 }
 
 func (p Page[T]) New(data []T, limit int, offset int) Page[T] {

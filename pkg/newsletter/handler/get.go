@@ -35,12 +35,14 @@ func (h *handler) Get(ctx *gin.Context) {
 	var blogID uuid.UUID
 
 	if pagination, err = pagination.Get(ctx); err != nil {
+		// not valid json
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	if filter, err = filter.Get(ctx); err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		// valid json
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

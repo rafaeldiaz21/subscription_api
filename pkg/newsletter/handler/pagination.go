@@ -9,8 +9,8 @@ import (
 )
 
 type Pagination struct {
-	Page             int    `form:"page" binding:"required"`
-	MaxPageSize      int    `form:"maxPageSize" binding:"required"`
+	Page             int    `json:"page" form:"page" binding:"required"`
+	MaxPageSize      int    `json:"maxPageSize" form:"maxPageSize" binding:"required"`
 	NumberOfPages    int    `json:"numberOfPages"`
 	PaginationString string `json:"paginationString"`
 	TotalElements    int    `json:"totalElements"`

@@ -6,9 +6,9 @@ import (
 )
 
 type Result[T any] struct {
-	Total int
-	Pages int
-	Page  Page[T]
+	Total int     `json:"total"`
+	Pages int     `json:"pages"`
+	Page  Page[T] `json:"page"`
 }
 
 func (r *Result[T]) Get(ctx context.Context, data []T) {
