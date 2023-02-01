@@ -1,14 +1,11 @@
 package newsletter
 
-import "fmt"
-
 type Page[T any] struct {
 	Number   int `json:"number"`
 	Elements []T `json:"elements"`
 }
 
 func (p Page[T]) New(data []T, limit int, offset int) Page[T] {
-	fmt.Println("data", len(data))
 
 	p.Number = 1
 	if len(data) <= offset {
@@ -29,9 +26,6 @@ func (p Page[T]) New(data []T, limit int, offset int) Page[T] {
 	if len(data) == 0 {
 		p.Number = (len(data) - offset) / limit
 	}
-
-	fmt.Println("limit", limit)
-	fmt.Println("offset", offset)
 
 	return p
 }
