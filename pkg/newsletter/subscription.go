@@ -13,7 +13,7 @@ var (
 )
 
 type Subscription struct {
-	UserID    uuid.UUID  `json:"userID" binding:"required"`
-	BlogID    uuid.UUID  `json:"blogID" binding:"required"`
+	UserID    uuid.UUID  `json:"userId" binding:"required"`
+	BlogID    uuid.UUID  `json:"blogId" binding:"required"`
 	Interests []Interest `json:"interests"`
 }
